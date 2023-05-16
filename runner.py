@@ -4,7 +4,7 @@ import getopt
 import json
 
 help_message = '''
-    script to test microservice lab by Hose 
+    script to test microservice lab by Hose https://github.com/Hose968/practice/blob/main/main.py
     
     -h           print this help message and exit           | OPTIONAL
     -m/--method  [GET, POST] method for testing             | REQUIRED
