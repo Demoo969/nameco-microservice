@@ -1,6 +1,7 @@
 from nameko.rpc import rpc
 import json
 
+
 class MessagesService:
     name = "messages_service"
 

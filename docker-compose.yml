@@ -1,0 +1,46 @@
+version: "2"
+services:
+
+  rabbit:
+    image: rabbitmq:3-management
+    ports:
+        - "15672:15672"
+
+  facade-service:
+    build:
+      context: facade-service
+    depends_on:
+      - rabbit
+    ports:
+        - "8000:8000"
+    environment:
+        RABBIT_PASSWORD: "guest"
+        RABBIT_USER: "guest"
+        RABBIT_HOST: "rabbit"
+        RABBIT_PORT: "5672"
+
+  messages-service:
+    build:
+      context: messages-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - rabbit
+    environment:
+        RABBIT_PASSWORD: "guest"
+        RABBIT_USER: "guest"
+        RABBIT_HOST: "rabbit"
+        RABBIT_PORT: "5672"
+
+  logging-service:
+    build:
+      context: logging-service
+    ports:
+      - "8002:8002"
+    depends_on:
+      - rabbit
+    environment:
+        RABBIT_PASSWORD: "guest"
+        RABBIT_USER: "guest"
+        RABBIT_HOST: "rabbit"
+        RABBIT_PORT: "5672"

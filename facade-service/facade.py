@@ -1,13 +1,12 @@
 from nameko.web.handlers import http
 from nameko.rpc import RpcProxy
 import uuid
-from bson import ObjectId
 import json
 
 
 class FacadeService:
     name = "facade_service"
-    url='http://127.0.0.1:8001/logger'
+   
     logging_rcp = RpcProxy("logging_service")
     messages_rcp = RpcProxy("messages_service")
 
