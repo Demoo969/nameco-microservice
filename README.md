@@ -4,10 +4,19 @@
   
  
 **To run project use:** 
+**First metod**
 ```shell
 1 $ python3 -m venv env
 2 $ pip install nameko in 
 3 $ service folder/nameko run [name of service]
+```
+**Second metod**
+```shell
+$ sudo docker-compose up
+```
+to rebuild it
+```shell
+$  sudo docker-compose up --no-deps --build 
 ```
 **To use project:**
 ```shell
