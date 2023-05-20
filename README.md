@@ -15,31 +15,21 @@
 
 **docker-compose.yml usage:**
 ```shell
-$ sudo docker compose up
+$ sudo docker-compose up
 ```
-
-after start `docker compose` run `main.py`:
+to rebuild container
 ```shell
-$ python3 main.py -m/--method [-t/--text = 'text message'] [-n/--number = 1]
+$  sudo docker-compose up --no-deps --build 
 ```
-
-**main.py usage:**
-```text
-$ python3 main.py -h
-
-    script to test microservice lab
-    
-    -h           print this help message and exit           | OPTIONAL
-    -m/--method  [GET, POST] method for testing             | REQUIRED
-    -t/--text    text of message to insert for POST method  | REQUIRED/OPTIONAL
-    -n/--number  count of POST requests                     | OPTIONAL
+**To use project:**
+```shell
+$ python3 runner.py -m 'METHOD' -t = 'text message' -n = "number to send count" 
 ```
-
-**example of usage [POST]:**
+**example of use [POST]:**
 ```shell
 $ python3 main.py -m post -t "test message" -n 10
 ```
-**example of usage [GET]:**
+**example of use [GET]:**
 ```shell
 $ python3 main.py -m get
 ```
