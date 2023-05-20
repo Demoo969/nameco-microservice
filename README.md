@@ -1,28 +1,29 @@
-# nameco-microservice
+### lab work 3
 
-  Its simply micro service code
-  
- 
-**To run project use:** 
-**First metod**
+#### structure:
+* facade-service: main access point of system
+  * app.py: main API off system
+  * Dockerfile: container for facade-service
+* logging-service: service that stores messages in memory
+  * app.py: logger API
+  * Dockerfile: container for logging-service
+* messages-service: empty service
+  * app.py: empty API
+  * Dockerfile: container for messages-service
+* docker-compose.yml: start point
+* main.py: testing script
+
+**docker-compose.yml usage:**
 ```shell
-1 $ python3 -m venv env
-2 $ pip install nameko in 
-3 $ service folder/nameko run [name of service]
+$ sudo docker compose up
 ```
-**Second metod**
+
+after start `docker compose` run `main.py`:
 ```shell
-$ sudo docker-compose up
+$ python3 main.py -m/--method [-t/--text = 'text message'] [-n/--number = 1]
 ```
-to rebuild it
-```shell
-$  sudo docker-compose up --no-deps --build 
-```
-**To use project:**
-```shell
-$ python3 runner.py -m/--method [-t/--text = 'text message'] [-n/--number = 1] 
-```
-**runner.py usage:**
+
+**main.py usage:**
 ```text
 $ python3 main.py -h
 
@@ -31,4 +32,14 @@ $ python3 main.py -h
     -h           print this help message and exit           | OPTIONAL
     -m/--method  [GET, POST] method for testing             | REQUIRED
     -t/--text    text of message to insert for POST method  | REQUIRED/OPTIONAL
+    -n/--number  count of POST requests                     | OPTIONAL
+```
+
+**example of usage [POST]:**
+```shell
+$ python3 main.py -m post -t "test message" -n 10
+```
+**example of usage [GET]:**
+```shell
+$ python3 main.py -m get
 ```

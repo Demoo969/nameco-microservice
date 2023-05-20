@@ -1,16 +1,12 @@
-FROM python:3
-
-RUN apt-get update && apt-get -y install netcat && apt-get clean
+FROM python:3.9-slim-buster
 
 WORKDIR /app
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY config.yml ./
-COPY run.sh ./
 COPY facade.py ./
 
-RUN chmod +x ./run.sh
+EXPOSE 9000
 
-CMD ["./run.sh"]
+CMD [ "python3", "facade.py" ]
