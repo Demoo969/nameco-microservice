@@ -7,8 +7,9 @@
 **First metod**
 ```shell
 1 $ python3 -m venv env
-2 $ pip install nameko in 
-3 $ service folder/nameko run [name of service]
+2 $ pip install nameko 
+in service folder
+3 $ nameko run [name of service]
 ```
 **Second metod**
 ```shell
@@ -24,7 +25,7 @@ $ python3 runner.py -m/--method [-t/--text = 'text message'] [-n/--number = 1]
 ```
 **runner.py usage:**
 ```text
-$ python3 main.py -h
+$ python3 runner.py -h
 
     script to test microservice lab
     
