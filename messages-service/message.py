@@ -1,14 +1,16 @@
-from nameko.rpc import rpc
-import json
+from flask import Flask, jsonify
 
+app = Flask(__name__)
 
 class MessagesService:
-    name = "messages_service"
+    @app.route('/', methods=['GET'])
+    def get_messages():
+        return jsonify('This is static message')
 
-    @rpc
-    def get_message(self,responce):
-        return f"This is a static message. {responce}\n"
 
-    @rpc
-    def post_message(self,message,message_id):   
-        return json.dumps({'Status: ': f"Message {message} sent with ID {message_id}"})
+    @app.route('/', methods=['POST'])
+    def post_messages():
+        return jsonify("Message sent to logging service")
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=9002)

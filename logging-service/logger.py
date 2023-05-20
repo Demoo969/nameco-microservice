@@ -1,22 +1,33 @@
-from nameko.rpc import rpc
-import json
+from flask import Flask, jsonify, request
+from hazelcast import HazelcastClient
+import os
 
+app = Flask(__name__)
 
+hazelcast_node_address = os.environ.get('HAZELCAST_NODE_ADDRESS')
+client = HazelcastClient(cluster_members=[hazelcast_node_address])
+messages = client.get_map('messages').blocking()
 class LoggingService:
-    name = "logging_service"
-    logs= []
 
-    @rpc
-    def log_message(self,message,message_id):
-        log_dict = {"uuid": message_id, "msg": message}
-        self.logs.append(log_dict)
-        print(json.dumps({'Gut it logged': log_dict}))
-
-    @rpc
-    def get_messages(self):
-        print(json.dumps({'Gets all msg': self.logs}))
-        return json.dumps(self.logs)
-        
+    @app.route('/', methods=['POST'])
+    def log():
+        message = request.json
+        msg = dict.values(message)
+        try:
+            for i in message.keys():
+                messages.put(i, message[i])
+                print(message[i])
+        except Exception as e:
+            return jsonify({'status: ':'fail',"message": e})
+        return jsonify(f"Success log message {msg}")
 
 
+    @app.route('/', methods=['GET'])
+    def get_messages():
+        answ = list()
+        for id_, text in messages.entry_set():
+            answ.append({id_: text})
+        return jsonify(answ)
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=9001)

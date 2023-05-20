@@ -1,1 +1,2 @@
-nameko
+Flask==2.1.0
+hazelcast-python-client

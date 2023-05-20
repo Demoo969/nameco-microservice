@@ -1,46 +1,91 @@
-version: "2"
+version: "3"
+
 services:
-
-  rabbit:
-    image: rabbitmq:3-management
-    ports:
-        - "15672:15672"
-
   facade-service:
     build:
-      context: facade-service
-    depends_on:
-      - rabbit
+      context: ./facade-service
     ports:
-        - "8000:8000"
+      - "9000:9000"
+    depends_on:
+      - logging-service-1
+      - logging-service-2
+      - logging-service-3
+      - messages-service
+    networks:
+      - hazelcast-cluster
+
+  hazelcast-1:
+    image: hazelcast/hazelcast:latest
     environment:
-        RABBIT_PASSWORD: "guest"
-        RABBIT_USER: "guest"
-        RABBIT_HOST: "rabbit"
-        RABBIT_PORT: "5672"
+      HZ_NETWORK_PUBLICADDRESS: hazelcast-1
+    ports:
+      - "5701:5701"
+    networks:
+      - hazelcast-cluster
+
+  hazelcast-2:
+    image: hazelcast/hazelcast:latest
+    environment:
+      HZ_NETWORK_PUBLICADDRESS: hazelcast-2
+      HZ_NETWORK_JOIN: hazelcast-1
+    ports:
+      - "5702:5701"
+    networks:
+      - hazelcast-cluster
+
+  hazelcast-3:
+    image: hazelcast/hazelcast:latest
+    environment:
+      HZ_NETWORK_PUBLICADDRESS: hazelcast-3
+      HZ_NETWORK_JOIN: hazelcast-1
+    ports:
+      - "5703:5701"
+    networks:
+      - hazelcast-cluster
+
+  logging-service-1:
+    build:
+      context: ./logging-service
+    environment:
+      HAZELCAST_NODE_ADDRESS: "hazelcast-1:5701"
+    depends_on:
+      - hazelcast-1
+    ports:
+      - "9001:9001"
+    networks:
+      - hazelcast-cluster
+
+  logging-service-2:
+    build:
+      context: ./logging-service
+    environment:
+      HAZELCAST_NODE_ADDRESS: "hazelcast-2:5701"
+    depends_on:
+      - hazelcast-2
+    ports:
+      - "9002:9001"
+    networks:
+      - hazelcast-cluster
+
+  logging-service-3:
+    build:
+      context: ./logging-service
+    environment:
+      HAZELCAST_NODE_ADDRESS: "hazelcast-3:5701"
+    depends_on:
+      - hazelcast-3
+    ports:
+      - "9003:9001"
+    networks:
+      - hazelcast-cluster
 
   messages-service:
     build:
-      context: messages-service
+      context: ./messages-service
     ports:
-      - "8001:8001"
-    depends_on:
-      - rabbit
-    environment:
-        RABBIT_PASSWORD: "guest"
-        RABBIT_USER: "guest"
-        RABBIT_HOST: "rabbit"
-        RABBIT_PORT: "5672"
+      - "9004:9002"
+    networks:
+      - hazelcast-cluster
 
-  logging-service:
-    build:
-      context: logging-service
-    ports:
-      - "8002:8002"
-    depends_on:
-      - rabbit
-    environment:
-        RABBIT_PASSWORD: "guest"
-        RABBIT_USER: "guest"
-        RABBIT_HOST: "rabbit"
-        RABBIT_PORT: "5672"
+networks:
+  hazelcast-cluster:
