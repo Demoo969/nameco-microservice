@@ -1,4 +1,4 @@
-### lab work 3
+### Flask microservice with Hazelcast
 
 #### structure:
 * facade-service: main access point of system
