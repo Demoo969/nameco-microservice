@@ -6,7 +6,7 @@
 **To run project use:** 
 **First metod**
 ```shell
-1 $ python3 -m venv env ```text recommended to  corect work```
+1 $ python3 -m venv env  #recommended to  corect work
 2 $ pip install nameko 
 3 $ nameko run [name of service]
 ```
